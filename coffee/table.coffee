@@ -3,18 +3,23 @@ Mod.require 'Weya.Base',
  (Base, Weya) ->
   class Table extends Base
    @initialize ->
+    @elems = {}
     @clear()
-    @size = 100000
+    @testData()
+
+   testData: ->
+    @size = 10000
     @data.number = ("#{i}" for i in [0...@size])
     @columns.push
+     id: 'number'
      name: 'number'
      type: 'number'
     @filteredRows = (i for i in [0...@size])
 
    clear: ->
     @data = {}
-    @columns = [] #name, type
-    @filteredRows = [] #array of filtered rows
+    @columns = []
+    @filteredRows = []
     @highlight =
      rows: []
      columns: []
@@ -25,12 +30,22 @@ Mod.require 'Weya.Base',
     @elems.container.innerHTML = ''
 
     Weya elem: @elems.container, context: this, ->
-     @$.elems.table =  @table ->
+     @$.elems.tableHeader =  @table ".table-header", ->
       @$.elems.thead = @thead ->
        @tr ->
         for col in @$.columns
          @th col.name
-      @$.elems.tbody = @tbody ''
+     @$.elems.tableBodyWrapper = @div '.table-body-wrapper', ->
+      @$.elems.tableBody =  @table ".table-body", ->
+       @$.elems.tbody = @tbody ''
+
+    window.requestAnimationFrame @on.getDimensions
+
+   @listen 'getDimensions', ->
+    height = @elems.container.offsetHeight -
+             @elems.tableHeader.offsetHeight
+    @elems.tableBodyWrapper.style.height = "#{height}px"
+
 
    generate: ->
     rows = (i for i in [0...@size])
@@ -43,3 +58,4 @@ Mod.require 'Weya.Base',
         d = @$.data[c.id][r]
         @td d
 
+  Mod.set 'Table', Table

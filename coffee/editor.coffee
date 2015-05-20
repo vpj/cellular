@@ -1,6 +1,7 @@
 Mod.require 'Weya.Base',
  'Weya'
- (Base, Weya) ->
+ 'Table'
+ (Base, Weya, Table) ->
   SIDEBAR_WIDTH = 300
 
   class Editor extends Base
@@ -17,7 +18,7 @@ Mod.require 'Weya.Base',
     height = window.innerHeight
     width = window.innerWidth
 
-    @elem.container.innerHTML = ''
+    @elems.container.innerHTML = ''
 
     Weya elem: @elems.container, context: this, ->
      @$.elems.content = @div ".content", null
