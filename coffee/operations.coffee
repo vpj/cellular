@@ -29,8 +29,8 @@ Mod.require 'Weya.Base',
      content: options.content
 
     @callbacks =
-     onCancel: options.onCancel
-     onApply: options.onApply
+     cancel: options.onCancel
+     apply: options.onApply
 
     @editor = options.editor
 

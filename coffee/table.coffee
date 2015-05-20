@@ -23,10 +23,12 @@ Mod.require 'Weya.Base',
      id: 'number'
      name: 'Number'
      type: 'number'
+     default: 0
     @columns.push
      id: 'id'
      name: 'Id'
      type: 'number'
+     default: 0
     @filteredRows = (i for i in [0...@size])
 
    clear: ->

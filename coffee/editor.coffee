@@ -15,7 +15,9 @@ Mod.require 'Weya.Base',
 
     @table = new Table()
     @operation = null
+    @history = []
 
+   getTable: -> @table
    render: (elem) ->
     @elems.container = elem
 
