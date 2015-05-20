@@ -1,61 +1,67 @@
-#toolbar
+Mod.require 'Weya.Base',
+ 'Weya'
+ (Base, Weya) ->
+  SIDEBAR_WIDTH = 300
 
-#add data
+  class Editor extends Base
+   @initialize (options) ->
+    @elems =
+     sidebar: null
+     content: null
 
-#view
+   render: (elem) ->
+    @elems.container = elem
 
-#add operation
-#search
-#list operations
+    height = window.innerHeight
+    width = window.innerWidth
 
-#undo
-#redoo
-class Editor extends Base
- @initialize (options) ->
-  @elems =
-   sidebar: null
-   content: null
+    Weya elem: @elems.container, context: this, ->
+     @$.elems.content = @div ".content", null
+     @$.elems.sidebar = @div ".sidebar", null
 
- render: ->
-  @renderTable()
-  @renderOperations()
+    @renderTable()
+    @renderOperations()
 
- selectOperation: (operation) ->
-  @operation = new operation
-   sidebar: @elems.sidebar
-   content: @elems.content
-   onCancel: @on.cancelOperation
-   onApply: @on.applyOperation
-   table: @table
+   selectOperation: (operation) ->
+    @operation = new operation
+     sidebar: @elems.sidebar
+     content: @elems.content
+     onCancel: @on.cancelOperation
+     onApply: @on.applyOperation
+     table: @table
 
- @listen 'applyOperation', ->
-  @history.push
-   type: @operation.type
-   data: @operation.json()
+   @listen 'applyOperation', ->
+    @history.push
+     type: @operation.type
+     data: @operation.json()
 
-  @operation.apply()
-  @renderTable()
-  @renderOperations()
-  @operation = null
+    @operation.apply()
+    @renderTable()
+    @renderOperations()
+    @operation = null
 
- @listen 'cancelOperation', ->
-  @renderTable()
-  @renderOperations()
-  @operation = null
+   @listen 'cancelOperation', ->
+    @renderTable()
+    @renderOperations()
+    @operation = null
 
- @listen 'selectOperation', ->
-  @operations[
+   @listen 'selectOperation', ->
+    #@operations[]
 
- @listen 'tableSelect', (r, c) ->
-  return unless @operation?
-  @operation.tableSelect r, c
+   @listen 'tableSelect', (r, c) ->
+    return unless @operation?
+    @operation.tableSelect r, c
 
- renderTable: ->
-  @table.render @elems.content
+   renderTable: ->
+    #@table.render @elems.content
 
- renderOperations: ->
-  #operations.render()
+   renderOperations: ->
+    #operations.render()
 
- @listen 'undo', ->
+   @listen 'undo', ->
 
- @listen 'redo', ->
+   @listen 'redo', ->
+
+  EDITOR = new Editor()
+  EDITOR.render document.body
+
