@@ -95,6 +95,7 @@ Mod.require 'Operation',
      type: 'string'
      default: ''
     @table.data[id] = @data
+    @table.size = @data.length
 
 
    @listen 'changeFile', (e) ->
