@@ -9,11 +9,15 @@ Mod.require 'Weya.Base',
      sidebar: null
      content: null
 
+    @table = new Table()
+
    render: (elem) ->
     @elems.container = elem
 
     height = window.innerHeight
     width = window.innerWidth
+
+    @elem.container.innerHTML = ''
 
     Weya elem: @elems.container, context: this, ->
      @$.elems.content = @div ".content", null
@@ -53,7 +57,8 @@ Mod.require 'Weya.Base',
     @operation.tableSelect r, c
 
    renderTable: ->
-    #@table.render @elems.content
+    @table.render @elems.content
+    @table.generate()
 
    renderOperations: ->
     #operations.render()

@@ -6,6 +6,7 @@ index = require '../ui-assets/index.coffee'
 UI_JS = [
  'main'
  'editor'
+ 'table'
 ]
 
 UI_LESS = ['style']
