@@ -10,9 +10,14 @@ Mod.require 'Weya.Base',
    testData: ->
     @size = 10000
     @data.number = ("#{i}" for i in [0...@size])
+    @data.id = ("#{parseInt Math.random() * 1000}" for i in [0...@size])
     @columns.push
      id: 'number'
-     name: 'number'
+     name: 'Number'
+     type: 'number'
+    @columns.push
+     id: 'id'
+     name: 'Id'
      type: 'number'
     @filteredRows = (i for i in [0...@size])
 
