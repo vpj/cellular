@@ -5,6 +5,8 @@ Mod.require 'Weya.Base',
   CLUSTER_MULTIPLE = 4
 
   class Table extends Base
+   @extend()
+
    @initialize ->
     @elems = {}
     @dims =

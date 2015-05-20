@@ -1,16 +1,20 @@
 Mod.require 'Weya.Base',
  'Weya'
  'Table'
- (Base, Weya, Table) ->
+ 'OPERATIONS'
+ (Base, Weya, Table, OPERATIONS) ->
   SIDEBAR_WIDTH = 300
 
   class Editor extends Base
+   @extend()
+
    @initialize (options) ->
     @elems =
      sidebar: null
      content: null
 
     @table = new Table()
+    @operation = null
 
    render: (elem) ->
     @elems.container = elem
@@ -33,7 +37,8 @@ Mod.require 'Weya.Base',
      content: @elems.content
      onCancel: @on.cancelOperation
      onApply: @on.applyOperation
-     table: @table
+     editor: this
+    @operation.render()
 
    @listen 'applyOperation', ->
     @history.push
@@ -50,8 +55,14 @@ Mod.require 'Weya.Base',
     @renderOperations()
     @operation = null
 
-   @listen 'selectOperation', ->
-    #@operations[]
+   @listen 'selectOperation', (e) ->
+    n = e.target
+    while n?
+     if n._type?
+      op = OPERATIONS.get n._type
+      @selectOperation op
+      return
+     n = n.parentNode
 
    @listen 'tableSelect', (r, c) ->
     return unless @operation?
@@ -62,12 +73,21 @@ Mod.require 'Weya.Base',
     @table.generate()
 
    renderOperations: ->
+    @elems.sidebar.innerHTML = ''
+
+    Weya elem: @elems.sidebar, context: this, ->
+     @div on: {click: @$.on.selectOperation}, ->
+      OPERATIONS.each (type, op) =>
+       btn = @button op.name
+       btn._type = type
+
     #operations.render()
 
    @listen 'undo', ->
 
    @listen 'redo', ->
 
-  EDITOR = new Editor()
-  EDITOR.render document.body
+  Mod.onLoad ->
+   EDITOR = new Editor()
+   EDITOR.render document.body
 

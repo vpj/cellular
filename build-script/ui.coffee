@@ -7,6 +7,8 @@ UI_JS = [
  'main'
  'editor'
  'table'
+ 'operations'
+ 'operations/add_data_column'
 ]
 
 UI_LESS = ['style']
