@@ -4,8 +4,8 @@ Mod.require 'Operation',
   class DelimiterSeparateColumn extends Base
    @extend()
 
-   name: 'Delimiter Separate'
-   @name: 'Delimiter Separate'
+   operationName: 'Delimiter Separate'
+   @operationName: 'Delimiter Separate'
    type: 'delimiterSeparate'
    @type: 'delimiterSeparate'
 

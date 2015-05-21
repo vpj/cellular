@@ -4,8 +4,8 @@ Mod.require 'Operation',
   class Append extends Base
    @extend()
 
-   name: 'Append Data'
-   @name: 'Append Data'
+   operationName: 'Append Data'
+   @operationName: 'Append Data'
    type: 'appendData'
    @type: 'appendData'
 

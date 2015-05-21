@@ -76,6 +76,7 @@ Mod.require 'Weya.Base',
     @operation.tableSelect r, c
 
    renderTable: ->
+    @table.clearHighlight()
     @table.render @elems.content
     @table.generate()
 
@@ -85,7 +86,7 @@ Mod.require 'Weya.Base',
     Weya elem: @elems.sidebar, context: this, ->
      @div on: {click: @$.on.selectOperation}, ->
       OPERATIONS.each (type, op) =>
-       btn = @button op.name
+       btn = @button op.operationName
        btn._type = type
 
     #operations.render()

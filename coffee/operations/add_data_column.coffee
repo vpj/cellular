@@ -17,8 +17,8 @@ Mod.require 'Operation',
   class AddColumn extends Base
    @extend()
 
-   name: 'Add Column'
-   @name: 'Add Column'
+   operationName: 'Add Column'
+   @operationName: 'Add Column'
    type: 'addColumn'
    @type: 'addColumn'
 
