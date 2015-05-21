@@ -63,37 +63,22 @@ Mod.require 'Operation',
     e.preventDefault()
     text = @textEditor.getValue()
     @data = text.split '\n'
-    @table = @editor.getTable()
     @callbacks.apply()
 
    @listen 'tableSelect', (r, c, table) ->
-    console.log r, c
+    @table = table
+    @column = table.columns[c].id
+    @renderLoad()
 
    apply: ->
-    if @data.length < @table.size
-     for i in [0...@table.size - @data.length]
-      @data.push ''
-    else if @data.length > @table.size
-     for c in @table.columns
-      for i in [0..@data.length - @table.size]
-        @table.data[c.id].push c.default
-
-    ids = {}
     for c in @table.columns
-     ids[c.id] = true
+     if c.id is @column
+      for d, i in @data
+       @table.data[c.id].push d
+     for i in [0...@data.length]
+       @table.data[c.id].push c.default
 
-    id = 'A'
-    for i in [0...@table.columns.length]
-     id = AAString i
-     break if not ids[id]?
-
-    @table.columns.push
-     id: id
-     name: id
-     type: 'string'
-     default: ''
-    @table.data[id] = @data
-    @table.size = @data.length
+    @table.size += @data.length
 
 
    @listen 'changeFile', (e) ->

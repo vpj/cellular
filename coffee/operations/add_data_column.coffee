@@ -78,7 +78,7 @@ Mod.require 'Operation',
       @data.push ''
     else if @data.length > @table.size
      for c in @table.columns
-      for i in [0..@data.length - @table.size]
+      for i in [0...@data.length - @table.size]
         @table.data[c.id].push c.default
 
     ids = {}

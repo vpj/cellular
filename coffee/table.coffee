@@ -36,10 +36,13 @@ Mod.require 'Weya.Base',
     @data = {}
     @columns = []
     @filteredRows = []
+    @clearHighlight()
+
+   clearHighlight: ->
     @highlight =
-     rows: []
-     columns: []
-     cells: []
+     rows: {}
+     columns: {}
+     cells: {}
 
    @get 'scroll', -> @elems.tableBodyWrapper.scrollTop
    @listen 'scroll', -> @generate()
@@ -60,15 +63,12 @@ Mod.require 'Weya.Base',
 
     Weya elem: @elems.container, context: this, ->
      @$.elems.tableHeader =  @table ".table-header", ->
-      @$.elems.thead = @thead ->
-       @tr ->
-        for col, i in @$.columns
-         th = @th col.name
-         th._row = -1
-         th._col = i
+      @$.elems.thead = @thead ''
      @$.elems.tableBodyWrapper = @div '.table-body-wrapper', ->
       @$.elems.tableBody =  @table ".table-body", ->
        @$.elems.tbody = @tbody ''
+
+    @_renderHeader()
 
     @elems.container.addEventListener 'click', @on.click
     @elems.tableBodyWrapper.addEventListener 'scroll', @on.scroll
@@ -84,6 +84,22 @@ Mod.require 'Weya.Base',
     @dims.clusterHeight = @dims.clusterRows * @dims.rowHeight
 
     @generate()
+
+   refresh: ->
+    @_renderHeader()
+    @generate()
+
+   _renderHeader: ->
+    @elems.thead.innerHTML = ''
+
+    Weya elem: @elems.thead, context: this, ->
+     @tr ->
+      for col, i in @$.columns
+       cssClass = '.th'
+       cssClass += '.hgc' if @$.highlight.columns[i] is on
+       th = @th cssClass, col.name
+       th._row = -1
+       th._col = i
 
    generate: ->
     scroll = @scroll
@@ -103,10 +119,14 @@ Mod.require 'Weya.Base',
     Weya elem: @elems.tbody, context: this, ->
      @tr '.top-space', style: {height: "#{topSpace}px"}
      for r in rows
-      @tr ->
+      rowCssClass = '.tr'
+      rowCssClass += '.hgr' if @$.highlight.rows[r] is on
+      @tr rowCssClass, ->
        for c, i in @$.columns
-        d = @$.data[c.id][r]
-        td = @td d
+        cssClass = '.td'
+        cssClass += 'hgc' if @$.highlight.columns[i] is on
+        cssClass += 'hg' if @$.highlight.cells["#{r}_#{i}"] is on
+        td = @td cssClass, @$.data[c.id][r]
         td._row = r
         td._col = i
      @tr '.bottom-space', style: {height: "#{bottomSpace}px"}
