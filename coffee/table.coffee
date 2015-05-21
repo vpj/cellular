@@ -87,7 +87,7 @@ Mod.require 'Weya.Base',
 
    refresh: ->
     @_renderHeader()
-    @generate()
+    @generate true
 
    _renderHeader: ->
     @elems.thead.innerHTML = ''
@@ -101,10 +101,10 @@ Mod.require 'Weya.Base',
        th._row = -1
        th._col = i
 
-   generate: ->
+   generate: (force) ->
     scroll = @scroll
     cluster = Math.floor scroll  / (@dims.clusterHeight - @dims.visibleHeight)
-    return if @_currentCluster is cluster
+    return if not force and @_currentCluster is cluster
 
     @_currentCluster = cluster
 
@@ -124,8 +124,8 @@ Mod.require 'Weya.Base',
       @tr rowCssClass, ->
        for c, i in @$.columns
         cssClass = '.td'
-        cssClass += 'hgc' if @$.highlight.columns[i] is on
-        cssClass += 'hg' if @$.highlight.cells["#{r}_#{i}"] is on
+        cssClass += '.hgc' if @$.highlight.columns[i] is on
+        cssClass += '.hg' if @$.highlight.cells["#{r}_#{i}"] is on
         td = @td cssClass, @$.data[c.id][r]
         td._row = r
         td._col = i

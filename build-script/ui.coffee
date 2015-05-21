@@ -10,6 +10,7 @@ UI_JS = [
  'operations'
  'operations/add_data_column'
  'operations/append_data'
+ 'operations/delimiter_separate_column'
 ]
 
 UI_LESS = ['style']
