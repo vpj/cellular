@@ -1,26 +1,13 @@
 Mod.require 'Operation',
  'OPERATIONS'
  (Base, OPERATIONS) ->
-  CHARS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
-
-  AAString = (n) ->
-   return 'A' if n is 0
-   s = ''
-   while n > 0
-    s += CHARS[n % CHARS.length]
-    n = n // CHARS.length
-   rev = ''
-   for i in [1..s.length]
-    rev += s[s.length - i]
-   return rev
-
-  class AddColumn extends Base
+  class Append extends Base
    @extend()
 
-   name: 'Add Column'
-   @name: 'Add Column'
-   type: 'addColumn'
-   @type: 'addColumn'
+   name: 'Append Data'
+   @name: 'Append Data'
+   type: 'appendData'
+   @type: 'appendData'
 
    json: ->
     column: @column
@@ -28,7 +15,14 @@ Mod.require 'Operation',
 
    render: ->
     @elems.sidebar.innerHTML = ''
+
+    Weya elem: @elems.sidebar, context: this, ->
+     @$.elems.status = @p 'Select a column'
+     @button on: {click: @$.on.cancel}, 'Cancel'
+
+   renderLoad: ->
     @elems.content.innerHTML = ''
+    @elems.sidebar.innerHTML = ''
 
     Weya elem: @elems.sidebar, context: this, ->
      @$.elems.file = @input ".input-file", 'Open',
@@ -36,9 +30,9 @@ Mod.require 'Operation',
       type: "file", on: {change: @$.on.changeFile}
 
      @button on: {click: @$.on.openFile}, 'Open file'
+     @button on: {click: @$.on.cancel}, 'Cancel'
 
      @button '.button-primary', on: {click: @$.on.loadData}, 'Load'
-     @button on: {click: @$.on.cancel}, 'Cancel'
 
     Weya elem: @elems.content, context: this, ->
      @$.elems.textArea = @textarea ".textarea-data", '',
@@ -72,6 +66,9 @@ Mod.require 'Operation',
     @table = @editor.getTable()
     @callbacks.apply()
 
+   @listen 'tableSelect', (r, c, table) ->
+    console.log r, c
+
    apply: ->
     if @data.length < @table.size
      for i in [0...@table.size - @data.length]
@@ -90,7 +87,6 @@ Mod.require 'Operation',
      id = AAString i
      break if not ids[id]?
 
-    @column = id
     @table.columns.push
      id: id
      name: id
@@ -115,4 +111,4 @@ Mod.require 'Operation',
 
 
 
-  OPERATIONS.set AddColumn.type, AddColumn
+  OPERATIONS.set Append.type, Append

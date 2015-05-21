@@ -13,7 +13,8 @@ Mod.require 'Weya.Base',
      sidebar: null
      content: null
 
-    @table = new Table()
+    @table = new Table
+     onClick: @on.tableClick
     @operation = null
     @history = []
 
@@ -51,6 +52,10 @@ Mod.require 'Weya.Base',
     @renderTable()
     @renderOperations()
     @operation = null
+
+   @listen 'tableClick', (r, c, table) ->
+    return unless @operation
+    @operation.on.tableSelect r, c, table
 
    @listen 'cancelOperation', ->
     @renderTable()

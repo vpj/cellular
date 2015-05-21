@@ -9,6 +9,7 @@ UI_JS = [
  'table'
  'operations'
  'operations/add_data_column'
+ 'operations/append_data'
 ]
 
 UI_LESS = ['style']

@@ -7,7 +7,8 @@ Mod.require 'Weya.Base',
   class Table extends Base
    @extend()
 
-   @initialize ->
+   @initialize (options) ->
+    @_onClick = options.onClick
     @elems = {}
     @dims =
      bodyHeight: 0
@@ -43,6 +44,14 @@ Mod.require 'Weya.Base',
    @get 'scroll', -> @elems.tableBodyWrapper.scrollTop
    @listen 'scroll', -> @generate()
 
+   @listen 'click', (e) ->
+    n = e.target
+
+    while n?
+     if n._row? and n._col?
+      @_onClick n._row, n._col, this
+     n = n.parentNode
+
    render: (elem) ->
     @elems.container = elem
     @elems.container.innerHTML = ''
@@ -53,12 +62,15 @@ Mod.require 'Weya.Base',
      @$.elems.tableHeader =  @table ".table-header", ->
       @$.elems.thead = @thead ->
        @tr ->
-        for col in @$.columns
-         @th col.name
+        for col, i in @$.columns
+         th = @th col.name
+         th._row = -1
+         th._col = i
      @$.elems.tableBodyWrapper = @div '.table-body-wrapper', ->
       @$.elems.tableBody =  @table ".table-body", ->
        @$.elems.tbody = @tbody ''
 
+    @elems.container.addEventListener 'click', @on.click
     @elems.tableBodyWrapper.addEventListener 'scroll', @on.scroll
     window.requestAnimationFrame @on.getDimensions
 
@@ -92,9 +104,11 @@ Mod.require 'Weya.Base',
      @tr '.top-space', style: {height: "#{topSpace}px"}
      for r in rows
       @tr ->
-       for c in @$.columns
+       for c, i in @$.columns
         d = @$.data[c.id][r]
-        @td d
+        td = @td d
+        td._row = r
+        td._col = i
      @tr '.bottom-space', style: {height: "#{bottomSpace}px"}
 
   Mod.set 'Table', Table
