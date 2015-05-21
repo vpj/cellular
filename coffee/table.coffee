@@ -14,7 +14,7 @@ Mod.require 'Weya.Base',
      bodyHeight: 0
      rowHeight: ROW_HEIGHT
     @clear()
-    @testData()
+    #@testData()
 
    testData: ->
     @size = 1000000
@@ -126,7 +126,8 @@ Mod.require 'Weya.Base',
         cssClass = '.td'
         cssClass += '.hgc' if @$.highlight.columns[i] is on
         cssClass += '.hg' if @$.highlight.cells["#{r}_#{i}"] is on
-        td = @td cssClass, @$.data[c.id][r]
+        d = @$.data[c.id][r] or c.default
+        td = @td cssClass, d
         td._row = r
         td._col = i
      @tr '.bottom-space', style: {height: "#{bottomSpace}px"}

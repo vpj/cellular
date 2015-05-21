@@ -21,6 +21,7 @@ template = ->
    @script src:"lib/weya/weya.js"
    @script src:"lib/weya/base.js"
    @script src:"lib/mod/mod.js"
+   @script src:"lib/dsv/lib/dsv.js"
 
    for file in @$.scripts
     @script src: "#{file}?v=#{VERSION}"

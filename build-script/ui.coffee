@@ -30,6 +30,7 @@ assets = exports.assets = taskUiAssets = (callback) ->
   "mkdir #{BUILD}/lib"
   "mkdir #{BUILD}/lib/weya"
   "mkdir #{BUILD}/lib/mod"
+  "mkdir #{BUILD}/lib/dsv"
  ]
 
  commands = commands.concat [
@@ -52,7 +53,7 @@ assets = exports.assets = taskUiAssets = (callback) ->
   css (e1) ->
    e += e1
    e += util.jsDir "lib/weya/", "#{BUILD}/lib/weya"
-   e += util.jsDir "lib/IO/", "#{BUILD}/lib/IO"
+   e += util.jsDir "lib/dsv/", "#{BUILD}/lib/dsv"
    e += util.jsDir "lib/mod/", "#{BUILD}/lib/mod"
 
    callback e

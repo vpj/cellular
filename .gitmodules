@@ -4,3 +4,6 @@
 [submodule "lib/mod"]
 	path = lib/mod
 	url = git@github.com:vpj/mod.git
+[submodule "lib/dsv"]
+	path = lib/dsv
+	url = git@github.com:vpj/dsv.git

@@ -24,6 +24,12 @@ Mod.require 'Operation',
       value: ','
       type: 'text'
       on: {change: @$.on.change}
+     @label for: 'quote-input', 'Quote'
+     @$.elems.quote = @input '#quote-input.u-full-width',
+      value: '"'
+      type: 'text'
+      on: {change: @$.on.change}
+
 
      @button on: {click: @$.on.cancel}, 'Cancel'
      @$.elems.btn = @button '.button-primary', 'Separate',
@@ -57,29 +63,47 @@ Mod.require 'Operation',
     else
      @elems.btn.style.display = 'none'
 
+   @listen 'separate', (e) ->
+    e.preventDefault()
+    @delimiter = @elems.delimiter.value.trim()
+    @quote = @elems.quote.value.trim()
+    if (@delimiter.substr 0, 3) is 'TAB'
+     n = parseInt @delimiter.substr 3
+     n = 1 if isNaN n
+     @delimiter = ''
+     @delimiter += '\t' for i in [0...n]
+    if @delimiter is 'SPACE'
+     n = parseInt @delimiter.substr 5
+     n = 1 if isNaN n
+     @delimiter = ''
+     @delimiter += ' ' for i in [0...n]
+
+    @callbacks.apply()
+
    apply: ->
-    for c in @table.columns
-     if c.id is @column
-      for d, i in @data
-       @table.data[c.id].push d
-     for i in [0...@data.length]
-       @table.data[c.id].push c.default
+    cidx = -1
+    for c, i in @table.columns when c.id is @column
+     cidx = i
 
-    @table.size += @data.length
+    data = @table.data[@column].join '\n'
+    data = dsv
+     separator: @delimiter
+     quote: @quote.charCodeAt 0
+     text: data
 
+    nColumns = data.length
+    col = @table.columns[cidx]
+    args = [cidx, 1]
+    for i in [1..nColumns]
+     args.push
+      id: "#{col.id}_#{i}"
+      name: "#{col.name}_#{i}"
+      type: 'string'
+      default: ''
 
-   @listen 'changeFile', (e) ->
-    files = @elems.file.files
-    if files.length > 0
-     file = files[0]
-     reader = new FileReader()
-     console.time "readFile"
-     reader.onload = (e) =>
-      @skipChangeText = true
-      @textEditor.setValue reader.result
-      reader.result = null
-
-     reader.readAsText file
+    @table.columns.splice.apply @table.columns, args
+    for d, i in data
+     @table.data["#{col.id}_#{i + 1}"] = d
 
 
 
