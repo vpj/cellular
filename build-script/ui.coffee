@@ -12,6 +12,7 @@ UI_JS = [
  'operations/append_data'
  'operations/delimiter_separate_column'
  'operations/search_delete_rows'
+ 'operations/header'
 ]
 
 UI_LESS = ['style']

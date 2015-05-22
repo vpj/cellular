@@ -172,4 +172,6 @@ Mod.require 'Weya.Base',
         td._col = i
      @tr '.bottom-space', style: {height: "#{bottomSpace}px"}
 
+    return
+
   Mod.set 'Table', Table
