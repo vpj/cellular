@@ -1,0 +1,24 @@
+{
+  "name": "cellular",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vpj/cellular.git"
+  },
+  "author": "Varuna Jayasiri",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/vpj/cellular/issues"
+  },
+  "homepage": "https://github.com/vpj/cellular#readme",
+  "dependencies": {
+    "coffee-script": "^1.9.2",
+    "less": "^2.5.1",
+    "uglify-js": "^2.4.23"
+  }
+}
