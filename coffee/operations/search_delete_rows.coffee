@@ -34,8 +34,6 @@ Mod.require 'Operation',
 
    @listen 'apply', (e) ->
     e.preventDefault()
-    text = @textEditor.getValue()
-    @data = text.split '\n'
     @callbacks.apply()
 
    @listen 'tableSelect', (r, c, table) ->
@@ -98,29 +96,20 @@ Mod.require 'Operation',
     @table.refresh()
 
    apply: ->
-    cidx = -1
-    for c, i in @table.columns when c.id is @column
-     cidx = i
+    @search = {}
+    for id, elems of @elems.inputs
+     @search[id] = elems.input.value
 
-    data = @table.data[@column].join '\n'
-    data = dsv
-     separator: @delimiter
-     quote: @quote.charCodeAt 0
-     text: data
+    highlight = (true for i in [0...@table.size])
+    for id, s of @search
+     regex = new RegExp s, ''
+     for d, r in @table.data[id]
+      if not regex.test d
+       highlight[r] = false
 
-    nColumns = data.length
-    col = @table.columns[cidx]
-    args = [cidx, 1]
-    for i in [1..nColumns]
-     args.push
-      id: "#{col.id}_#{i}"
-      name: "#{col.name}_#{i}"
-      type: 'string'
-      default: ''
-
-    @table.columns.splice.apply @table.columns, args
-    for d, i in data
-     @table.data["#{col.id}_#{i + 1}"] = d
+    for id, data of @table.data
+     @table.data[id] = (data[r] for d, r in highlight when not d)
+     @table.size = @table.data[id].length
 
 
 
