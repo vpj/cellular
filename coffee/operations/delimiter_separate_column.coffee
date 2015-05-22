@@ -40,12 +40,6 @@ Mod.require 'Operation',
     e.preventDefault()
     @callbacks.cancel()
 
-   @listen 'separate', (e) ->
-    e.preventDefault()
-    text = @textEditor.getValue()
-    @data = text.split '\n'
-    @callbacks.apply()
-
    @listen 'tableSelect', (r, c, table) ->
     @table = table
     @column = table.columns[c].id
