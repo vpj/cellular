@@ -20,7 +20,8 @@ Mod.require 'Operation',
     @elems.sidebar.innerHTML = ''
 
     Weya elem: @elems.sidebar, context: this, ->
-     @$.elems.inputsDiv = @div ''
+     @$.elems.inputsDiv = @div
+      on: {click: @$.on.removeClick}
 
      @button on: {click: @$.on.cancel}, 'Cancel'
      @$.elems.btn = @button '.button-primary', 'Delete',
@@ -43,7 +44,22 @@ Mod.require 'Operation',
     @addInputs id, table.columns[c].name, table.data[id][r]
     @refresh()
 
+   @listen 'change', ->
+    @refresh()
+
+   @listen 'removeClick', (e) ->
+    n = e.target
+    while n?
+     if n._id?
+      @elems.inputsDiv.removeChild @elems.inputs[n._id].div
+      delete @elems.inputs[n._id]
+      @refresh()
+     n = n.parentNode
+
    addInputs: (id, name, search) ->
+    if @elems.inputs[id]?
+     @elems.inputsDiv.removeChild @elems.inputs[id].div
+
     Weya elem: @elems.inputsDiv, context: this, ->
      elems = {}
      elems.div = @div ->
@@ -51,6 +67,7 @@ Mod.require 'Operation',
       elems.input = @input "#search-#{id}",
        value: search
        type: 'text'
+       on: {change: @$.on.change}
       elems.remove = @button 'Remove'
      elems.remove._id = id
      @$.elems.inputs[id] = elems
@@ -72,7 +89,7 @@ Mod.require 'Operation',
     for id, s of @search
      regex = new RegExp s, ''
      for d, r in @table.data[id]
-      if not regex.text d
+      if not regex.test d
        highlight[r] = false
 
     for d, r in highlight when d
