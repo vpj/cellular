@@ -85,7 +85,8 @@ Mod.require 'Weya.Base',
 
    @listen 'getDimensions', ->
     @dims.bodyHeight = @elems.container.offsetHeight -
-             @elems.tableHeader.offsetHeight
+             @elems.tableHeader.offsetHeight - 20
+    @dims.containerWidth = @elems.container.offsetWidth
     @elems.tableBodyWrapper.style.height = "#{@dims.bodyHeight}px"
     @dims.visibleRows = Math.ceil @dims.bodyHeight / @dims.rowHeight
     @dims.clusterRows = @dims.visibleRows * CLUSTER_MULTIPLE
@@ -105,6 +106,8 @@ Mod.require 'Weya.Base',
 
      col.width = Math.ceil width
      @dims.tableWidth += col.width
+
+    @dims.tableWidth = Math.max @dims.tableWidth, @dims.containerWidth
 
     @refresh()
 
