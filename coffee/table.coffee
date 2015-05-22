@@ -60,15 +60,19 @@ Mod.require 'Weya.Base',
     @elems.container.innerHTML = ''
 
     @_currentCluster = -1
+    s = ''
+    s += 'A' for i in [0...20]
 
     Weya elem: @elems.container, context: this, ->
      @$.elems.tableHeader =  @table ".table-header", ->
       @$.elems.thead = @thead ''
      @$.elems.tableBodyWrapper = @div '.table-body-wrapper', ->
       @$.elems.tableBody =  @table ".table-body", ->
-       @$.elems.tbody = @tbody ''
+       @$.elems.tbody = @tbody ->
+        @tr ->
+         @td ->
+          @$.elems.singleChar = @span s
 
-    @_renderHeader()
 
     @elems.container.addEventListener 'click', @on.click
     @elems.tableBodyWrapper.addEventListener 'scroll', @on.scroll
@@ -83,7 +87,19 @@ Mod.require 'Weya.Base',
     @dims.visibleHeight = @dims.visibleRows * @dims.rowHeight
     @dims.clusterHeight = @dims.clusterRows * @dims.rowHeight
 
-    @generate()
+    @dims.charWidth = @elems.singleChar.offsetWidth / 20
+    console.log @dims.charWidth
+    @elems.tbody.innerHTML = ''
+
+    for col, i in @columns
+     width = 0
+     for d in @data[col.id]
+      d = d or col.default
+      width = Math.max width, d.length * @dims.charWidth
+
+     col.width = Math.ceil width
+
+    @refresh()
 
    refresh: ->
     @_renderHeader()
@@ -97,7 +113,8 @@ Mod.require 'Weya.Base',
       for col, i in @$.columns
        cssClass = '.th'
        cssClass += '.hgc' if @$.highlight.columns[i] is on
-       th = @th cssClass, col.name
+       th = @th cssClass, col.name,
+        style: {width: "#{col.width}px"}
        th._row = -1
        th._col = i
 
@@ -127,7 +144,8 @@ Mod.require 'Weya.Base',
         cssClass += '.hgc' if @$.highlight.columns[i] is on
         cssClass += '.hg' if @$.highlight.cells["#{r}_#{i}"] is on
         d = @$.data[c.id][r] or c.default
-        td = @td cssClass, d
+        td = @td cssClass, d,
+         style: {width: "#{c.width}px"}
         td._row = r
         td._col = i
      @tr '.bottom-space', style: {height: "#{bottomSpace}px"}

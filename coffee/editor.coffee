@@ -78,7 +78,6 @@ Mod.require 'Weya.Base',
    renderTable: ->
     @table.clearHighlight()
     @table.render @elems.content
-    @table.generate()
 
    renderOperations: ->
     @elems.sidebar.innerHTML = ''
