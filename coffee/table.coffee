@@ -45,7 +45,10 @@ Mod.require 'Weya.Base',
      cells: {}
 
    @get 'scroll', -> @elems.tableBodyWrapper.scrollTop
-   @listen 'scroll', -> @generate()
+
+   @listen 'scroll', (e) ->
+    e.stopPropagation()
+    @generate()
 
    @listen 'click', (e) ->
     n = e.target
