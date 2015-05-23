@@ -54,8 +54,8 @@ Mod.require 'Weya.Base',
       editor: this
      op.setJson h.data
      op.apply()
-
     h = @history[n]
+
     @operation = new (OPERATIONS.get h.type)
      sidebar: @elems.sidebar
      content: @elems.content
@@ -65,7 +65,8 @@ Mod.require 'Weya.Base',
     @operation.setJson h.data
     @renderTable()
     @renderOperations()
-    @operation.render()
+    window.requestAnimationFrame =>
+     @operation.render()
 
 
    @listen 'applyOperation', ->
@@ -108,8 +109,6 @@ Mod.require 'Weya.Base',
       @selectHistory n._history
       return
      n = n.parentNode
-
-
 
    @listen 'tableSelect', (r, c) ->
     return unless @operation?
