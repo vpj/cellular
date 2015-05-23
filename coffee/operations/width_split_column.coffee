@@ -88,6 +88,7 @@ Mod.require 'Operation',
      v  = parseInt elems.input.value
      continue if isNaN v
      zero = (v is 0)
+     continue if v is 0
      offset += v * @table.dims.charWidth
      @_addLine offset
 
@@ -100,17 +101,22 @@ Mod.require 'Operation',
      @elems.btn.style.display = 'none'
 
    apply: ->
+    offsets = [0]
     cidx = -1
     for c, i in @table.columns when c.id is @column
      cidx = i
 
-    data = @table.data[@column].join '\n'
-    data = dsv
-     separator: @delimiter
-     quote: @quote.charCodeAt 0
-     text: data
+    offset = 0
+    offsets = [0]
+    for elems in @elems.inputs
+     v  = parseInt elems.input.value
+     continue if isNaN v
+     continue if v is 0
+     offset += v
+     offsets.push offset
+    offsets.push undefined
 
-    nColumns = data.length
+    nColumns = offsets.length - 1
     col = @table.columns[cidx]
     args = [cidx, 1]
     for i in [1..nColumns]
@@ -121,6 +127,13 @@ Mod.require 'Operation',
       default: ''
 
     @table.columns.splice.apply @table.columns, args
+    data = ([] for i in [0...nColumns])
+    for r in [0...@table.size]
+     v = "#{@table.data[col.id][r] or col.default}"
+     for i in [0...nColumns]
+      data[i].push v.substring offsets[i], offsets[i + 1]
+
+    delete @table.data[col.id]
     for d, i in data
      @table.data["#{col.id}_#{i + 1}"] = d
 

@@ -95,6 +95,7 @@ Mod.require 'Operation',
       type: 'string'
       default: ''
 
+    delete @table.data[col.id]
     @table.columns.splice.apply @table.columns, args
     for d, i in data
      @table.data["#{col.id}_#{i + 1}"] = d
