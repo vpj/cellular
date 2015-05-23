@@ -105,7 +105,7 @@ Mod.require 'Weya.Base',
       d = d or col.default
       width = Math.max width, d.length * @dims.charWidth
 
-     col.width = Math.ceil width
+     col.width = 5 + Math.ceil width
      @dims.tableWidth += col.width
 
     @dims.tableWidth = Math.max @dims.tableWidth, @dims.containerWidth

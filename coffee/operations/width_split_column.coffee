@@ -1,6 +1,8 @@
 Mod.require 'Operation',
  'OPERATIONS'
  (Base, OPERATIONS) ->
+  PADDING = 2
+
   class WidthSplitColumn extends Base
    @extend()
 
@@ -72,6 +74,7 @@ Mod.require 'Operation',
     for col in @table.columns
      break if col.id is @column
      offset += col.width
+    offset += PADDING
     Weya elem: @table.elems.container, context: this, ->
      @$.elems.lines.push @div '.split-line', style: {left: "#{offset}px"}
 
