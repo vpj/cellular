@@ -23,8 +23,12 @@ Mod.require 'Operation',
    @type: 'addColumn'
 
    json: ->
-    column: @column
     data: @data
+    table: @table.id
+
+   setJson: (json) ->
+    @data = json.data
+    @table = @editor.getTable json.table
 
    render: ->
     @elems.sidebar.innerHTML = ''
@@ -57,6 +61,11 @@ Mod.require 'Operation',
 
     @textEditor.setSize '100%', '100%'
 
+    @_setData() if @data?
+
+   _setData: ->
+    @textEditor.setValue @data
+
    @listen 'openFile', (e) ->
     e.preventDefault()
     @elems.file.click()
@@ -67,18 +76,18 @@ Mod.require 'Operation',
 
    @listen 'loadData', (e) ->
     e.preventDefault()
-    text = @textEditor.getValue()
-    @data = text.split '\n'
+    @data = @textEditor.getValue()
     @table = @editor.getTable()
     @callbacks.apply()
 
    apply: ->
-    if @data.length < @table.size
-     for i in [0...@table.size - @data.length]
-      @data.push ''
-    else if @data.length > @table.size
+    data = @data.split '\n'
+    if data.length < @table.size
+     for i in [0...@table.size - data.length]
+      data.push ''
+    else if data.length > @table.size
      for c in @table.columns
-      for i in [0...@data.length - @table.size]
+      for i in [0...data.length - @table.size]
         @table.data[c.id].push c.default
 
     ids = {}
@@ -90,14 +99,14 @@ Mod.require 'Operation',
      id = AAString i
      break if not ids[id]?
 
-    @column = id
+    column = id
     @table.columns.push
      id: id
      name: id
      type: 'string'
      default: ''
-    @table.data[id] = @data
-    @table.size = @data.length
+    @table.data[id] = data
+    @table.size = data.length
 
 
    @listen 'changeFile', (e) ->

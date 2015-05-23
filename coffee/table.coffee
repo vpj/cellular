@@ -9,6 +9,8 @@ Mod.require 'Weya.Base',
   class Table extends Base
    @extend()
 
+   @get 'id', -> 'SINGLETON'
+
    @initialize (options) ->
     @_onClick = options.onClick
     @elems = {}
@@ -38,6 +40,8 @@ Mod.require 'Weya.Base',
     @data = {}
     @columns = []
     @filteredRows = []
+    @size = 0
+
     @clearHighlight()
 
    clearHighlight: ->

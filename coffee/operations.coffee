@@ -38,5 +38,7 @@ Mod.require 'Weya.Base',
 
    json: -> {}
 
+   title: -> @operationName
+
 
   Mod.set 'Operation', Operation
