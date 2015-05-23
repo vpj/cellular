@@ -47,7 +47,7 @@ Mod.require 'Operation',
       on: {click: @$.on.apply}
       style: {display: 'none'}
 
-    @_setData() if @top?
+    @_setData() if @table?
 
    _setData: ->
     @elems.topRows.value = "#{@top}"

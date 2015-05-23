@@ -13,8 +13,12 @@ Mod.require 'Operation',
    @type: 'searchDeleteRows'
 
    json: ->
-    column: @column
-    delimiter: @delimiter
+    table: @table.id
+    search: @search
+
+   setJson: (json) ->
+    @search = json.search
+    @table = @editor.getTable json.table
 
    render: ->
     @elems.sidebar.innerHTML = ''
@@ -28,12 +32,27 @@ Mod.require 'Operation',
       on: {click: @$.on.apply}
       style: {display: 'none'}
 
+    @_setData() if @table?
+
+   _setData: ->
+    for id, value of @search
+     name = id
+     for col in @table.columns when col.id is id
+      name = col.name
+     @addInputs id, name, value
+
+    @refresh()
+
    @listen 'cancel', (e) ->
     e.preventDefault()
     @callbacks.cancel()
 
    @listen 'apply', (e) ->
     e.preventDefault()
+    @search = {}
+    for id, elems of @elems.inputs
+     @search[id] = elems.input.value
+
     @callbacks.apply()
 
    @listen 'tableSelect', (r, c, table) ->
@@ -96,10 +115,6 @@ Mod.require 'Operation',
     @table.refresh()
 
    apply: ->
-    @search = {}
-    for id, elems of @elems.inputs
-     @search[id] = elems.input.value
-
     highlight = (true for i in [0...@table.size])
     for id, s of @search
      regex = new RegExp s, ''
