@@ -3,6 +3,7 @@ Mod.require 'Weya.Base',
  (Base, Weya) ->
   ROW_HEIGHT = 20
   CLUSTER_MULTIPLE = 4
+  CHARS = 500
 
   class Table extends Base
    @extend()
@@ -66,7 +67,7 @@ Mod.require 'Weya.Base',
 
     @_currentCluster = -1
     s = ''
-    s += 'A' for i in [0...20]
+    s += 'A' for i in [0...CHARS]
 
     Weya elem: @elems.container, context: this, ->
      @$.elems.tableHeader =  @table ".table-header", ->
@@ -94,7 +95,7 @@ Mod.require 'Weya.Base',
     @dims.clusterHeight = @dims.clusterRows * @dims.rowHeight
     @dims.tableWidth = 0
 
-    @dims.charWidth = @elems.singleChar.offsetWidth / 20
+    @dims.charWidth = @elems.singleChar.offsetWidth / CHARS
     console.log @dims.charWidth
     @elems.tbody.innerHTML = ''
 

@@ -13,6 +13,7 @@ UI_JS = [
  'operations/delimiter_separate_column'
  'operations/search_delete_rows'
  'operations/header'
+ 'operations/width_split_column'
 ]
 
 UI_LESS = ['style']
