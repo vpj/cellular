@@ -161,7 +161,7 @@ Mod.require 'Operation',
         undefined
        else
         @table.data[col.id][hr])
-      detail = r + @bottom
+      detail = r + @bottom + 1
 
      @_addRows table, col.id, values, detail, @table.size + @top
 
@@ -172,7 +172,7 @@ Mod.require 'Operation',
 
    _addRows: (table, id, values, detail, header) ->
     return if detail >= header - @top
-    for i in [0...@top + @bottom]
+    for i in [0..@top + @bottom]
      c = "#{id}_#{i + 1}"
      table[c].push values[i] for r in [detail...header - @top]
     c = "#{id}_0"
