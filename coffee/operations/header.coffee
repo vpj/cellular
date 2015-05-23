@@ -13,8 +13,16 @@ Mod.require 'Operation',
    @type: 'header'
 
    json: ->
-    column: @column
-    delimiter: @delimiter
+    table: @table.id
+    top: @top
+    bottom: @bottom
+    search: @search
+
+   setJson: (json) ->
+    @top = json.top
+    @bottom = json.bottom
+    @search = json.search
+    @table = @editor.getTable json.table
 
    render: ->
     @elems.sidebar.innerHTML = ''
@@ -39,12 +47,36 @@ Mod.require 'Operation',
       on: {click: @$.on.apply}
       style: {display: 'none'}
 
+    @_setData() if @top?
+
+   _setData: ->
+    @elems.topRows.value = "#{@top}"
+    @elems.bottomRows.value = "#{@bottom}"
+    for id, value of @search
+     name = id
+     for col in @table.columns when col.id is id
+      name = col.name
+     @addInputs id, name, value
+
+    @refresh()
+
    @listen 'cancel', (e) ->
     e.preventDefault()
     @callbacks.cancel()
 
    @listen 'apply', (e) ->
     e.preventDefault()
+    @search = {}
+    for id, elems of @elems.inputs
+     @search[id] = elems.input.value
+
+    top = parseInt @elems.topRows.value
+    top = -1 if isNaN top
+    bottom = parseInt @elems.bottomRows.value
+    bottom = -1 if isNaN bottom
+
+    @top = top
+    @bottom = bottom
     @callbacks.apply()
 
    @listen 'tableSelect', (r, c, table) ->
@@ -115,18 +147,6 @@ Mod.require 'Operation',
     @table.refresh()
 
    apply: ->
-    @search = {}
-    for id, elems of @elems.inputs
-     @search[id] = elems.input.value
-
-    top = parseInt @elems.topRows.value
-    top = -1 if isNaN top
-    bottom = parseInt @elems.bottomRows.value
-    bottom = -1 if isNaN bottom
-
-    @top = top
-    @bottom = bottom
-
     highlight = (true for i in [0...@table.size])
     for id, s of @search
      regex = new RegExp s, ''
