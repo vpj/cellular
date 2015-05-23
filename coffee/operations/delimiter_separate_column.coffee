@@ -12,6 +12,14 @@ Mod.require 'Operation',
    json: ->
     column: @column
     delimiter: @delimiter
+    quote: @quote
+    table: @table.id
+
+   setJson: (json) ->
+    @column = json.column
+    @delimiter = json.delimiter
+    @quote = json.quote
+    @table = @editor.getTable json.table
 
    render: ->
     @elems.sidebar.innerHTML = ''
@@ -30,11 +38,27 @@ Mod.require 'Operation',
       type: 'text'
       on: {change: @$.on.change}
 
-
      @button on: {click: @$.on.cancel}, 'Cancel'
      @$.elems.btn = @button '.button-primary', 'Separate',
       on: {click: @$.on.separate}
       style: {display: 'none'}
+
+    @_setData() if @column?
+
+   _setData: ->
+    delimiter = @delimiter
+    if delimiter is ' '
+     delimiter = 'SPACE'
+    else if delimiter is '\t'
+     delimiter = 'TAB'
+    @elems.delimiter.value = delimiter
+    @elems.quote.value = @quote
+    @table.clearHighlight()
+    for col, c in @table.columns when col.id is @column
+     @table.highlight.columns[c] = true
+    @table.refresh()
+    @refresh()
+
 
    @listen 'cancel', (e) ->
     e.preventDefault()
