@@ -4,6 +4,7 @@ Mod.require 'Weya.Base',
   ROW_HEIGHT = 20
   CLUSTER_MULTIPLE = 4
   CHARS = 500
+  SCROLLBAR_MARGIN = 20
 
   class Table extends Base
    @extend()
@@ -86,7 +87,7 @@ Mod.require 'Weya.Base',
 
    @listen 'getDimensions', ->
     @dims.bodyHeight = @elems.container.offsetHeight -
-             @elems.tableHeader.offsetHeight - 20
+             @elems.tableHeader.offsetHeight - SCROLLBAR_MARGIN
     @dims.containerWidth = @elems.container.offsetWidth
     @elems.tableBodyWrapper.style.height = "#{@dims.bodyHeight}px"
     @dims.visibleRows = Math.ceil @dims.bodyHeight / @dims.rowHeight
@@ -145,7 +146,7 @@ Mod.require 'Weya.Base',
        th._col = i
 
     @elems.tableHeader.style.width = "#{@dims.tableWidth}px"
-    @elems.tableBodyWrapper.style.width = "#{@dims.tableWidth}px"
+    @elems.tableBodyWrapper.style.width = "#{@dims.tableWidth + SCROLLBAR_MARGIN}px"
     @elems.tableBody.style.width = "#{@dims.tableWidth}px"
 
    generate: (force) ->
