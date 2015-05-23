@@ -17,7 +17,13 @@ Mod.require 'Operation',
 
    json: ->
     column: @column
-    delimiter: @delimiter
+    table: @table.id
+    offsets: @offsets
+
+   setJson: (json) ->
+    @offsets = json.offsets
+    @column = json.column
+    @table = @editor.getTable json.table
 
    render: ->
     @elems.sidebar.innerHTML = ''
@@ -32,12 +38,31 @@ Mod.require 'Operation',
       on: {click: @$.on.apply}
       style: {display: 'none'}
 
+    @_setData() if @table?
+
+   _setData: ->
+    n = @offsets.length
+    for i in [1...n]
+     split = @offsets[i] - @offsets[i - 1]
+     @_addInput split
+
+    @refresh()
+
    @listen 'cancel', (e) ->
     e.preventDefault()
     @callbacks.cancel()
 
    @listen 'apply', (e) ->
     e.preventDefault()
+    offset = 0
+    @offsets = [0]
+    for elems in @elems.inputs
+     v  = parseInt elems.input.value
+     continue if isNaN v
+     continue if v is 0
+     offset += v
+     @offsets.push offset
+
     @callbacks.apply()
 
    @listen 'tableSelect', (r, c, table) ->
@@ -51,14 +76,15 @@ Mod.require 'Operation',
    @listen 'change', ->
     @refresh()
 
-   _addInput: ->
+   _addInput: (split) ->
+    split ?= 0
     n = @elems.inputs.length
     Weya elem: @elems.inputsDiv, context: this, ->
      elems = {}
      elems.div = @div ->
       @label for: "split-#{n}", "Split #{n + 1}"
       elems.input = @input "#split-#{n}",
-       value: '0'
+       value: "#{split}"
        type: 'number'
        on: {change: @$.on.change}
      @$.elems.inputs.push elems
@@ -104,22 +130,11 @@ Mod.require 'Operation',
      @elems.btn.style.display = 'none'
 
    apply: ->
-    offsets = [0]
     cidx = -1
     for c, i in @table.columns when c.id is @column
      cidx = i
 
-    offset = 0
-    offsets = [0]
-    for elems in @elems.inputs
-     v  = parseInt elems.input.value
-     continue if isNaN v
-     continue if v is 0
-     offset += v
-     offsets.push offset
-    offsets.push undefined
-
-    nColumns = offsets.length - 1
+    nColumns = @offsets.length
     col = @table.columns[cidx]
     args = [cidx, 1]
     for i in [1..nColumns]
@@ -134,7 +149,7 @@ Mod.require 'Operation',
     for r in [0...@table.size]
      v = "#{@table.data[col.id][r] or col.default}"
      for i in [0...nColumns]
-      data[i].push v.substring offsets[i], offsets[i + 1]
+      data[i].push v.substring @offsets[i], @offsets[i + 1]
 
     delete @table.data[col.id]
     for d, i in data
