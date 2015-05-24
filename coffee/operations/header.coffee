@@ -42,10 +42,10 @@ Mod.require 'Operation',
      @$.elems.inputsDiv = @div
       on: {click: @$.on.removeClick}
 
-     @button on: {click: @$.on.cancel}, 'Cancel'
-     @$.elems.btn = @button '.button-primary', 'Header',
+     @$.elems.btn = @button '.u-full-width.button-primary', 'Header',
       on: {click: @$.on.apply}
       style: {display: 'none'}
+     @button '.u-full-width', on: {click: @$.on.cancel}, 'Cancel'
 
     @_setData() if @table?
 
@@ -104,12 +104,13 @@ Mod.require 'Operation',
     Weya elem: @elems.inputsDiv, context: this, ->
      elems = {}
      elems.div = @div ->
-      elems.label = @label for: "search-#{id}", name
-      elems.input = @input "#search-#{id}",
+      elems.label = @label for: "search-#{id}", ->
+       @span name
+       elems.remove = @span '.remove', 'X'
+      elems.input = @input "#search-#{id}.u-full-width",
        value: search
        type: 'text'
        on: {change: @$.on.change}
-      elems.remove = @button 'Remove'
      elems.remove._id = id
      @$.elems.inputs[id] = elems
 
