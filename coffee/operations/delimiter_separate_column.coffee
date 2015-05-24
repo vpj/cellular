@@ -40,7 +40,7 @@ Mod.require 'Operation',
 
      @button on: {click: @$.on.cancel}, 'Cancel'
      @$.elems.btn = @button '.button-primary', 'Separate',
-      on: {click: @$.on.separate}
+      on: {click: @$.on.apply}
       style: {display: 'none'}
 
     @_setData() if @column?
@@ -81,7 +81,7 @@ Mod.require 'Operation',
     else
      @elems.btn.style.display = 'none'
 
-   @listen 'separate', (e) ->
+   @listen 'apply', (e) ->
     e.preventDefault()
     @delimiter = @elems.delimiter.value.trim()
     @quote = @elems.quote.value.trim()

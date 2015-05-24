@@ -15,6 +15,7 @@ UI_JS = [
  'operations/header'
  'operations/width_split_column'
  'operations/export'
+ 'operations/trim'
 ]
 
 UI_LESS = ['style']
