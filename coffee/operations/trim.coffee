@@ -49,7 +49,6 @@ Mod.require 'Operation',
      return
 
     @table = table
-    @table.clearHighlight()
     if @columns[table.columns[c].id] is on
      delete @columns[table.columns[c].id]
      @table.highlight.columns[c] = false
@@ -71,8 +70,8 @@ Mod.require 'Operation',
 
    apply: ->
     for id of @columns
-     for i in [0...@table.size]
-      @table.data[id][i] = @table.data[id][i].trim()
+     for i in [0...@table.size] when @table.data[id][i]?
+      @table.data[id][i] = "#{@table.data[id][i]}".trim()
 
 
 
