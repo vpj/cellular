@@ -24,7 +24,7 @@ Mod.require 'Operation',
 
     Weya elem: @elems.sidebar, context: this, ->
      @$.elems.status = @p 'Select a column'
-     @button on: {click: @$.on.cancel}, 'Cancel'
+     @button '.u-full-width', on: {click: @$.on.cancel}, 'Cancel'
 
     @renderLoad() if @column?
 
@@ -38,10 +38,10 @@ Mod.require 'Operation',
       style: {display: "none"}
       type: "file", on: {change: @$.on.changeFile}
 
-     @button on: {click: @$.on.openFile}, 'Open file'
-     @button on: {click: @$.on.cancel}, 'Cancel'
+     @button ".u-full-width", on: {click: @$.on.openFile}, 'Open file'
 
-     @button '.button-primary', on: {click: @$.on.loadData}, 'Load'
+     @button '.u-full-width.button-primary', on: {click: @$.on.apply}, 'Load'
+     @button ".u-full-width", on: {click: @$.on.cancel}, 'Cancel'
 
     Weya elem: @elems.content, context: this, ->
      @$.elems.textArea = @textarea ".textarea-data", '',
@@ -74,7 +74,7 @@ Mod.require 'Operation',
     e.preventDefault()
     @callbacks.cancel()
 
-   @listen 'loadData', (e) ->
+   @listen 'apply', (e) ->
     e.preventDefault()
     @data = @textEditor.getValue()
     @callbacks.apply()

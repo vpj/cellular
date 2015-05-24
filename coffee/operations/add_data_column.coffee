@@ -41,7 +41,7 @@ Mod.require 'Operation',
 
      @button ".u-full-width", on: {click: @$.on.openFile}, 'Open file'
 
-     @button ".u-full-width.button-primary", on: {click: @$.on.loadData}, 'Load'
+     @button ".u-full-width.button-primary", on: {click: @$.on.apply}, 'Load'
      @button ".u-full-width", on: {click: @$.on.cancel}, 'Cancel'
 
     Weya elem: @elems.content, context: this, ->
@@ -74,7 +74,7 @@ Mod.require 'Operation',
     e.preventDefault()
     @callbacks.cancel()
 
-   @listen 'loadData', (e) ->
+   @listen 'apply', (e) ->
     e.preventDefault()
     @data = @textEditor.getValue()
     @table = @editor.getTable()
