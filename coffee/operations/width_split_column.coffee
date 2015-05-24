@@ -33,10 +33,10 @@ Mod.require 'Operation',
 
      @$.elems.inputsDiv = @div ''
 
-     @button on: {click: @$.on.cancel}, 'Cancel'
-     @$.elems.btn = @button '.button-primary', 'Split',
+     @$.elems.btn = @button '.u-full-width.button-primary', 'Split',
       on: {click: @$.on.apply}
       style: {display: 'none'}
+     @button '.u-full-width', on: {click: @$.on.cancel}, 'Cancel'
 
     @_setData() if @table?
 
@@ -83,7 +83,7 @@ Mod.require 'Operation',
      elems = {}
      elems.div = @div ->
       @label for: "split-#{n}", "Split #{n + 1}"
-      elems.input = @input "#split-#{n}",
+      elems.input = @input "#split-#{n}.u-full-width",
        value: "#{split}"
        type: 'number'
        on: {change: @$.on.change}
