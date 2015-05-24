@@ -26,10 +26,10 @@ Mod.require 'Operation',
     Weya elem: @elems.sidebar, context: this, ->
      @$.elems.status = @p 'Select columns'
 
-     @button on: {click: @$.on.cancel}, 'Cancel'
-     @$.elems.btn = @button '.button-primary', 'Trim',
+     @$.elems.btn = @button '.u-full-width.button-primary', 'Trim',
       on: {click: @$.on.apply}
       style: {display: 'none'}
+     @button '.u-full-width', on: {click: @$.on.cancel}, 'Cancel'
 
     @_setData() if @table?
 
