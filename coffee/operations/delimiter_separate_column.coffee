@@ -38,10 +38,10 @@ Mod.require 'Operation',
       type: 'text'
       on: {change: @$.on.change}
 
-     @button on: {click: @$.on.cancel}, 'Cancel'
-     @$.elems.btn = @button '.button-primary', 'Separate',
+     @$.elems.btn = @button '.u-full-width.button-primary', 'Separate',
       on: {click: @$.on.apply}
       style: {display: 'none'}
+     @button '.u-full-width', on: {click: @$.on.cancel}, 'Cancel'
 
     @_setData() if @column?
 
