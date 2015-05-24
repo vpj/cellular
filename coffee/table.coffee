@@ -113,7 +113,8 @@ Mod.require 'Weya.Base',
      col.width = 5 + Math.ceil width
      @dims.tableWidth += col.width
 
-    @dims.tableWidth = Math.max @dims.tableWidth, @dims.containerWidth
+    @dims.tableWidth = Math.max @dims.tableWidth,
+                                @dims.containerWidth - SCROLLBAR_MARGIN
 
     @refresh()
 

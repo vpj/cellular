@@ -123,13 +123,27 @@ Mod.require 'Weya.Base',
 
     Weya elem: @elems.sidebar, context: this, ->
      @div '.operations-list', on: {click: @$.on.selectOperation}, ->
+      @h3 'Operations:'
+      first = true
+
       OPERATIONS.each (type, op) =>
-       btn = @button op.operationName
+       if first
+        btn = @div ".first", op.operationName
+        first = false
+       else
+        btn = @div op.operationName
        btn._type = type
 
      @div '.history-list', on: {click: @$.on.selectHistory}, ->
+      @h3 'History:'
+      first = true
+
       for h, i in @$.history
-       btn = @button h.title
+       if first
+        btn = @div ".first", h.title
+        first = false
+       else
+        btn = @div h.title
        btn._history = i
 
 
