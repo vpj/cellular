@@ -18,7 +18,7 @@ Mod.require 'Operation',
     @elems.content.innerHTML = ''
 
     Weya elem: @elems.sidebar, context: this, ->
-     @button on: {click: @$.on.cancel}, 'OK'
+     @button '.u-full-width', on: {click: @$.on.cancel}, 'OK'
 
     Weya elem: @elems.content, context: this, ->
      @$.elems.textArea = @textarea ".textarea-data", '',
