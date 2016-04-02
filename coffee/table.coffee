@@ -61,7 +61,7 @@ Mod.require 'Weya.Base',
 
     while n?
      if n._row? and n._col?
-      @_onClick n._row, n._col, this
+      @_onClick n._row, n._col, this, e
      n = n.parentNode
 
    render: (elem) ->

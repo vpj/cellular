@@ -84,9 +84,9 @@ Mod.require 'Weya.Base',
     @renderOperations()
     @operation = null
 
-   @listen 'tableClick', (r, c, table) ->
+   @listen 'tableClick', (r, c, table, event) ->
     return unless @operation
-    @operation.on.tableSelect r, c, table
+    @operation.on.tableSelect r, c, table, event
 
    @listen 'cancelOperation', ->
     @renderTable()

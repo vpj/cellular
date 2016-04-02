@@ -40,12 +40,22 @@ Mod.require 'Operation',
     e.preventDefault()
     @callbacks.apply()
 
-   @listen 'tableSelect', (r, c, table) ->
+   @listen 'tableSelect', (r, c, table, event) ->
     @table = table
-    if @columns[c]
-     delete @columns[c]
+    if event.shiftKey
+     if @columns[c]
+      for i in [c..0]
+       break if not @columns[i]
+       delete @columns[i]
+     else
+      for i in [c..0]
+       break if @columns[i]
+       @columns[i] = true
     else
-     @columns[c] = true
+     if @columns[c]
+      delete @columns[c]
+     else
+      @columns[c] = true
     @refresh()
 
    refresh: ->
@@ -66,6 +76,7 @@ Mod.require 'Operation',
     n = 0
     for col, i in @table.columns when @columns[i]
      id = col.id
+     sampleCol = col
      n++
     id = "#{id}_0"
 
@@ -89,6 +100,13 @@ Mod.require 'Operation',
     for col, i in @table.columns
      if not @columns[i]
       columns.push col
+
+    columns.push
+     id: id
+     name: id
+     type: sampleCol.type
+     default: sampleCol.default
+
 
     @table.columns = columns
     @table.data = data
