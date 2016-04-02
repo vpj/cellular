@@ -24,7 +24,7 @@ Mod.require 'Operation',
     @elems.sidebar.innerHTML = ''
 
     Weya elem: @elems.sidebar, context: this, ->
-     @$.elems.btn = @button '.u-full-width.button-primary', 'Delete',
+     @$.elems.btn = @button '.u-full-width.button-primary', 'Pull',
       on: {click: @$.on.apply}
       style: {display: 'none'}
      @button '.u-full-width', on: {click: @$.on.cancel}, 'Cancel'
