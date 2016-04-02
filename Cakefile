@@ -35,21 +35,7 @@ task 'build', "Build all", (opts) ->
  buildUi (e) ->
   util.finish e
 
-task 'build:ui', "Build UI", (opts) ->
- GLOBAL.options = opts
- buildUi (e) ->
-  util.finish e
-
 buildUi = (callback) ->
  ui.assets (e1) ->
   ui.js (e2) ->
    callback e1 + e2
-
-task 'build:ui-js', "Build UI js", (opts) ->
- GLOBAL.options = opts
- ui.js util.finish
-
-task 'build:ui-assets', "Build CSS, index.html, worker.js and copy assets", (opts) ->
- GLOBAL.options = opts
- ui.assets util.finish
-
