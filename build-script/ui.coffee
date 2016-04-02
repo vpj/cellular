@@ -16,8 +16,9 @@ UI_JS = [
  'operations/search_delete_rows'
  'operations/header'
  'operations/width_split_column'
- 'operations/export'
  'operations/trim'
+ 'operations/reverse_cross_tabulate'
+ 'operations/export'
 ]
 
 UI_LESS = ['style']
