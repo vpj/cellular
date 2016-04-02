@@ -74,6 +74,7 @@ Mod.require 'Operation',
      n = n.parentNode
 
    addInputs: (id, name, search) ->
+    search = '$^' if search is ''
     if @elems.inputs[id]?
      @elems.inputsDiv.removeChild @elems.inputs[id].div
 
