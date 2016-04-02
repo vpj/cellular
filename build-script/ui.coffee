@@ -9,6 +9,7 @@ UI_JS = [
  'table'
  'operations'
  'operations/add_data_column'
+ 'operations/delete_columns'
  'operations/append_data'
  'operations/delimiter_separate_column'
  'operations/search_delete_rows'
