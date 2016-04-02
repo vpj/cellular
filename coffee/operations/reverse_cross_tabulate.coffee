@@ -25,7 +25,7 @@ Mod.require 'Operation',
     @elems.sidebar.innerHTML = ''
 
     Weya elem: @elems.sidebar, context: this, ->
-     @$.elems.btn = @button '.u-full-width.button-primary', 'Delete',
+     @$.elems.btn = @button '.u-full-width.button-primary', 'Convert to rows',
       on: {click: @$.on.apply}
       style: {display: 'none'}
      @button '.u-full-width', on: {click: @$.on.cancel}, 'Cancel'
@@ -78,7 +78,8 @@ Mod.require 'Operation',
      id = col.id
      sampleCol = col
      n++
-    id = "#{id}_0"
+    idHead = "#{id}_0"
+    id = "#{id}_1"
 
     data = {}
     for col, i in @table.columns when not @columns[i]
@@ -90,10 +91,12 @@ Mod.require 'Operation',
     @table.size *= n
 
     data[id] = new Array @table.size
+    data[idHead] = new Array @table.size
     m = 0
     for col, i in @table.columns when @columns[i]
      for d, j in @table.data[col.id]
       data[id][m + j * n] = d
+      data[idHead][m + j * n] = col.name
      m++
 
     columns = []
@@ -101,6 +104,11 @@ Mod.require 'Operation',
      if not @columns[i]
       columns.push col
 
+    columns.push
+     id: idHead
+     name: idHead
+     type: sampleCol.type
+     default: sampleCol.default
     columns.push
      id: id
      name: id
