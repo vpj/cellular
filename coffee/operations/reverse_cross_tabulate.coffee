@@ -6,6 +6,7 @@ Mod.require 'Operation',
 
    @initialize ->
     @elems.inputs = {}
+    @columns = {}
 
    operationName: 'Reverse Cross Tabulate'
    @operationName: 'Reverse Cross Tabulate'
@@ -50,7 +51,7 @@ Mod.require 'Operation',
    refresh: ->
     n = 0
     n++ for c of @columns
-    if n > 0
+    if n > 1
      @elems.btn.style.display = 'block'
     else
      @elems.btn.style.display = 'none'
@@ -62,14 +63,35 @@ Mod.require 'Operation',
     @table.refresh()
 
    apply: ->
+    n = 0
+    for col, i in @table.columns when @columns[i]
+     id = col.id
+     n++
+    id = "#{id}_0"
+
+    data = {}
+    for col, i in @table.columns when not @columns[i]
+     data[col.id] = []
+     for d in @table.data[col.id]
+      for j in [0...n]
+       data[col.id].push d
+
+    @table.size *= n
+
+    data[id] = new Array @table.size
+    m = 0
+    for col, i in @table.columns when @columns[i]
+     for d, j in @table.data[col.id]
+      data[id][m + j * n] = d
+     m++
+
     columns = []
     for col, i in @table.columns
-     if @columns[i]
-      delete @table.data[col.id]
-     else
+     if not @columns[i]
       columns.push col
 
     @table.columns = columns
+    @table.data = data
 
 
   OPERATIONS.set ReverseCrossTabulate.type, ReverseCrossTabulate
