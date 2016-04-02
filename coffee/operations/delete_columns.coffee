@@ -58,18 +58,18 @@ Mod.require 'Operation',
      @elems.btn.style.display = 'none'
 
     @table.highlight.columns = {}
-    for c in @columns
+    for c of @columns
      @table.highlight.columns[c] = true
 
     @table.refresh()
 
    apply: ->
     columns = []
-    for col in @table.columns when not @columns[col.id]
-     columns.push col
-
-    for c in @columns
-     delete @table.data[c]
+    for col, i in @table.columns
+     if @columns[i]
+      delete @table.data[col.id]
+     else
+      columns.push col
 
     @table.columns = columns
 
