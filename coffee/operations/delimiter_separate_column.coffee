@@ -106,6 +106,7 @@ Mod.require 'Operation',
     column = @table.data[@column]
     data = []
     for d, r in column
+     d ?= ''
      d = dsv
       separator: @delimiter
       quote: @quote
