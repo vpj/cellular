@@ -82,9 +82,10 @@ Mod.require 'Operation',
     id = "#{id}_1"
 
     data = {}
+    size = @table.size
     for col, i in @table.columns when not @columns[i]
      data[col.id] = []
-     for r in [0...@table.size]
+     for r in [0...size]
       d = @table.data[col.id][r]
       for j in [0...n]
        data[col.id].push d
@@ -95,7 +96,7 @@ Mod.require 'Operation',
     data[idHead] = new Array @table.size
     m = 0
     for col, i in @table.columns when @columns[i]
-     for j in [0...@table.size]
+     for j in [0...size]
       d = @table.data[col.id][j]
       data[id][m + j * n] = d
       data[idHead][m + j * n] = col.name
