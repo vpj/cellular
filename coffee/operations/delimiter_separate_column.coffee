@@ -103,11 +103,23 @@ Mod.require 'Operation',
     for c, i in @table.columns when c.id is @column
      cidx = i
 
-    data = @table.data[@column].join '\n'
-    data = dsv
-     separator: @delimiter
-     quote: @quote.charCodeAt 0
-     text: data
+    column = @table.data[@column]
+    data = []
+    for d, r in column
+     d = dsv
+      separator: @delimiter
+      quote: @quote
+      text: d
+     while d.length < data.length
+      d.push ['']
+     for t, i in d
+      if data.length <= i
+       a = new Array r
+       for j in [0...r]
+        a[j] = ''
+       data.push a
+
+      data[i].push t[0]
 
     nColumns = data.length
     col = @table.columns[cidx]
