@@ -107,7 +107,9 @@ Mod.require 'Operation',
     highlight = (true for i in [0...@table.size])
     for id, s of @search
      regex = new RegExp s, ''
-     for d, r in @table.data[id]
+     data = @table.data[id]
+     for r in [0...@table.size]
+      d = data[r]
       if not regex.test d
        highlight[r] = false
 
