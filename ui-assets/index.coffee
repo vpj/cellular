@@ -17,6 +17,7 @@ template = ->
 
   @body ->
    @script src:"lib/codemirror/lib/codemirror.js"
+   @script src:"lib/coffee-script.js"
 
    @script src:"lib/weya/weya.js"
    @script src:"lib/weya/base.js"

@@ -18,6 +18,7 @@ UI_JS = [
  'operations/width_split_column'
  'operations/trim'
  'operations/reverse_cross_tabulate'
+ 'operations/search_func'
  'operations/export'
 ]
 

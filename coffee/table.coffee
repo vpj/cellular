@@ -46,6 +46,7 @@ Mod.require 'Weya.Base',
 
    clearHighlight: ->
     @highlight =
+     onlyHighlightedRows: false
      rows: {}
      columns: {}
      cells: {}
@@ -164,6 +165,9 @@ Mod.require 'Weya.Base',
     from = cluster * (@dims.clusterRows - @dims.visibleRows)
     to = Math.min from + @dims.clusterRows, @size
     rows = (i for i in [from...to])
+    if @highlight.onlyHighlightedRows
+     show = (r for r, v of @highlight.rows when v)
+     rows = (show[r] for r in rows when show[r]?)
 
     topSpace = from * @dims.rowHeight
     bottomSpace = (@size - to) * @dims.rowHeight
