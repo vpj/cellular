@@ -7,14 +7,15 @@ Mod.require 'Operation',
    @initialize ->
     @elems.inputs = {}
 
-   operationName: 'Search Rows'
-   @operationName: 'Search Rows'
+   operationName: 'Search & Process'
+   @operationName: 'Search & Process'
    type: 'searchRows'
    @type: 'searchRows'
 
    json: ->
     table: @table.id
     search: @search
+    func: @func
 
    setJson: (json) ->
     @search = json.search
@@ -32,6 +33,9 @@ Mod.require 'Operation',
       @$.elems.func = @textarea "#search-func.u-full-width",
        value: '-> false'
        on: {change: @$.on.change}
+
+     @$.elems.btn = @button '.u-full-width.button-primary', 'Apply',
+      on: {click: @$.on.apply}
      @button '.u-full-width', on: {click: @$.on.cancel}, 'Cancel'
 
     @_setData() if @table?
@@ -81,12 +85,17 @@ Mod.require 'Operation',
      elems.remove._id = id
      @$.elems.inputs[id] = elems
 
+   @listen 'apply', (e) ->
+    e.preventDefault()
+    @search = {}
+    @search[id] = true for id of @elems.inputs
+    @func = @elems.func.value
+    @callbacks.apply()
+
+
    refresh: ->
     @search = {}
-    n = 0
-    for id, elems of @elems.inputs
-     @search[id] = true
-     n++
+    @search[id] = true for id of @elems.inputs
     @func = @elems.func.value
     try
      text = @func
@@ -105,7 +114,8 @@ Mod.require 'Operation',
     highlight = (true for i in [0...@table.size])
     for r in [0...@table.size]
      args = (@table.data[id][r] for id of @search)
-     if func.apply null, args
+     result = func.apply null, args
+     if result? and result isnt false
       highlight[r] = true
      else
       highlight[r] = false
@@ -116,6 +126,31 @@ Mod.require 'Operation',
     @table.refresh()
 
    apply: ->
+    try
+     text = @func
+     coffee = CoffeeScript.compile "return (#{text})"
+     func = new Function "return #{coffee}"
+     func = func()
+    catch e
+     func = -> false
+
+    deleteRows = {}
+    for r in [0...@table.size]
+     args = (@table.data[id][r] for id of @search)
+     result = func.apply null, args
+     if result? and result isnt false
+      if result.delete
+       deleteRows[r] = true
+      else if result.replace?
+       c = 0
+       for id of @search
+        @table.data[id][r] = result.replace[c]
+        ++c
+
+    for id, data of @table.data
+     @table.data[id] = (d for d, r in data when not deleteRows[r])
+     @table.size = @table.data[id].length
+
 
 
 
