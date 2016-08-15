@@ -1,5 +1,5 @@
 require 'coffee-script/register'
-GLOBAL.BUILD = 'build'
+global.BUILD = 'build'
 
 util = require './build-script/util'
 ui = require './build-script/ui'
@@ -31,7 +31,7 @@ task 'clean', "Cleans up build directory", (opts) ->
   util.finish err
 
 task 'build', "Build all", (opts) ->
- GLOBAL.options = opts
+ global.options = opts
  buildUi (e) ->
   util.finish e
 
